@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        #calculator {
+            width: 300px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        #display {
+            width: 100%;
+            height: 50px;
+            text-align: right;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: white;
+        }
+        .button {
+            width: 22%;
+            height: 50px;
+            margin: 1%;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        #videoContainer {
+            display: none;
+            margin-top: 20px;
+        }
+        video {
+            width: 300px;
+            border-radius: 10px;
+        }
+        #fullscreenVideoContainer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 1000;
+        }
+        #fullscreenVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <input type="text" id="display" disabled>
+        <div>
+            <button class="button" onclick="appendNumber(0)">0</button>
+            <button class="button" onclick="appendNumber(1)">1</button>
+            <button class="button" onclick="appendNumber(2)">2</button>
+            <button class="button" onclick="appendNumber(3)">3</button>
+            <button class="button" onclick="appendNumber(4)">4</button>
+            <button class="button" onclick="appendNumber(5)">5</button>
+            <button class="button" onclick="appendNumber(6)">6</button>
+            <button class="button" onclick="appendNumber(7)">7</button>
+            <button class="button" onclick="appendNumber(😎">8</button>
+            <button class="button" onclick="triggerNine()">9</button>
+            <button class="button" onclick="appendOperator(' + ')">+</button>
+            <button class="button" onclick="appendOperator(' - ')">-</button>
+            <button class="button" onclick="appendOperator(' x ')">x</button>
+            <button class="button" onclick="appendOperator(' ÷ ')">÷</button>
+            <button class="button" onclick="clearDisplay()">C</button>
+            <button class="button" onclick="calculate()">=</button>
+        </div>
+    </div>
+    <div id="videoContainer">
+        <video id="video" autoplay loop>
+            <source src="zebzebzeb.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div id="nineVideoContainer" style="display: none;">
+        <video id="nineVideo" autoplay loop>
+            <source src="2ced0ba9-d183-461f-bdc0-7eeeda8702b6.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div id="fullscreenVideoContainer">
+        <video id="fullscreenVideo" autoplay loop>
+            <source src="16816f9a-4904-488f-a813-db9861930312" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <script>
+        const display = document.getElementById('display');
+        const videoContainer = document.getElementById('videoContainer');
+        const video = document.getElementById('video');
+        const nineVideoContainer = document.getElementById('nineVideoContainer');
+        const nineVideo = document.getElementById('nineVideo');
+        const fullscreenVideoContainer = document.getElementById('fullscreenVideoContainer');
+        const fullscreenVideo = document.getElementById('fullscreenVideo');
+
+        function appendNumber(number) {
+            display.value += number;
+        }
+
+        function appendOperator(operator) {
+            display.value += operator;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+            videoContainer.style.display = 'none';
+            video.pause();
+            video.currentTime = 0;
+            nineVideoContainer.style.display = 'none';
+            nineVideo.pause();
+            nineVideo.currentTime = 0;
+            fullscreenVideoContainer.style.display = 'none';
+            fullscreenVideo.pause();
+            fullscreenVideo.currentTime = 0;
+        }
+
+        function calculate() {
+            if (display.value.trim() === '2 x 2') {
+                videoContainer.style.display = 'block';
+                video.play();
+            } else if (display.value.trim() === '1 + 1') {
+                askPermission();
+            } else {
+                try {
+                    const sanitizedInput = display.value.replace('x', '*').replace('÷', '/');
+                    display.value = eval(sanitizedInput);
+                } catch {
+                    display.value = 'Error';
+                }
+            }
+        }
+
+        function triggerNine() {
+            display.value += '9';
+            nineVideoContainer.style.display = 'block';
+            nineVideo.play();
+        }
+
+        function askPermission() {
+            if (confirm("Permission to be awesome?")) {
+                fullscreenVideoContainer.style.display = 'block';
+                fullscreenVideo.play();
+            }
+        }
+    </script>
+</body>
+</html>
